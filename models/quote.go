@@ -1,35 +1,40 @@
 package models
 
 type Quote struct {
-    body string
-    author string
+    Body string
+    Author string
 }
 
 type QuoteSource interface {
-    GetQuote() Quote
+    GetQuote() (Quote, error)
+}
+
+type QuoteSourceEntry struct {
+    Name string
+    Source QuoteSource
 }
 
 // Quotes from 
 type QuoteDBSource struct {
-    categories []string
+    Categories []string
 }
 
 type TheySaidSoQuoteSource struct {
-    categories []string
+    Categories []string
 }
 
 type FileQuoteSource struct {
 
 }
 
-func (source *QuoteDBSource) GetQuote() Quote {
-    return Quote{"QuoteDBSource", "bar"}
+func (source QuoteDBSource) GetQuote() (Quote, error) {
+    return Quote{"QuoteDBSource", "bar"}, nil
 }
 
-func (source *TheySaidSoQuoteSource) GetQuote() Quote {
-    return Quote{"TheySaidSoQuoteSource", "bar"}
+func (source TheySaidSoQuoteSource) GetQuote() (Quote, error) {
+    return Quote{"TheySaidSoQuoteSource", "bar"}, nil
 }
 
-func (source *FileQuoteSource) GetQuote() Quote {
-    return Quote{"FileQuoteSource", "bar"}
+func (source FileQuoteSource) GetQuote() (Quote, error) {
+    return Quote{"FileQuoteSource", "bar"}, nil
 }

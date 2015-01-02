@@ -23,12 +23,12 @@ func init() {
     // Setup routes
     r := martini.NewRouter()
 
-    var sourceMap = map[string]models.QuoteSource{
-        "file": &models.FileQuoteSource{},
-        "theysaidso": &models.TheySaidSoQuoteSource{},
-        "quotedb": &models.QuoteDBSource{},
+    sources := []models.QuoteSourceEntry{
+        {"file", models.FileQuoteSource{}},
+        {"theysaidso", models.TheySaidSoQuoteSource{}},
+        {"quotedb", models.QuoteDBSource{}},
     }
-    routes.SetQuoteSources(&sourceMap)
+    routes.SetQuoteSources(sources)
 
     r.Get("/quote", routes.GetQuote)
     r.Get("/quote/:source", routes.GetQuote)
