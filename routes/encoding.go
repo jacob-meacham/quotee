@@ -39,6 +39,8 @@ func (_ JsonEncoder) Encode(v ...interface{}) (string, error) {
     if v == nil {
         // So that empty results produces `[]` and not `null`
         data = []interface{}{}
+    } else if len(v) == 1 {
+        data = v[0]
     }
     b, err := json.Marshal(data)
     return string(b), err

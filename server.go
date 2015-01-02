@@ -30,9 +30,9 @@ func init() {
     logSources(sourceMap)
     routes.SetQuoteSources(sourceMap)
 
-    r.Get("/quote", routes.GetQuote)
-    r.Get("/quote/:source", routes.GetQuote)
-    r.Get("/quote/theysaidso/static", routes.GetTest)
+    r.Get("/api/quote", routes.GetQuote)
+    r.Get("/api/quote/:source", routes.GetQuote)
+    r.Get("/api/quote/theysaidso/static", routes.GetTest)
     
     // Add the router action
     m.Action(r.Handle)
@@ -46,7 +46,8 @@ func getQuoteSources() map[string]models.QuoteSource {
 
     return map[string]models.QuoteSource{
         "file": fileQuoteSource,
-        "theysaidso": models.TheySaidSoQuoteSource{Url: "http://localhost:3000/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}},
+        //"theysaidso": models.TheySaidSoQuoteSource{Url: "http://api.theysaidso.com/qod.json", Categories: []string{"funny", "life", "inspire", "love"}},
+        "theysaidso": models.TheySaidSoQuoteSource{Url: "http://localhost:3000/api/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}},
         "quotedb": models.QuoteDBSource{},
     }
 }
@@ -54,7 +55,7 @@ func getQuoteSources() map[string]models.QuoteSource {
 func logSources(sources map[string]models.QuoteSource) {
     log.Print("Registered Sources:")
     for name, v := range sources {
-        log.Printf("/quote/%s: %s", name, v)
+        log.Printf("api/quote/%s: %s", name, v)
     }
 }
 

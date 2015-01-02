@@ -1,8 +1,8 @@
 package models
 
 type Quote struct {
-    Body string
-    Author string
+    Body string `json:"body" xml:"body"`
+    Author string `json:"author" xml:"author"`
 }
 
 type QuoteSource interface {
