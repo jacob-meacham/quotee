@@ -35,3 +35,7 @@ func GetQuote(r *http.Request, enc Encoder, parms martini.Params) (int, string) 
     }
     return http.StatusOK, Must(enc.Encode(quote))
 }
+
+func GetTest(r *http.Request, parms martini.Params) (int, string) {
+    return http.StatusOK, `{"success":{"total":1},"contents":{"id":"UA6fPz652xt_AJzwP1ULiweF","quote":"Women want men, careers, money, children, friends, luxury, comfort, independence, freedom, respect, love, and a three-dollar pantyhose that won't run.","author":"Phyllis Diller","length":"150","tags":["funny","humor","women"],"category":"funny"}}`
+}
