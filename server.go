@@ -1,11 +1,13 @@
 package main
 
 import (
-    "github.com/jacob-meacham/quotee/routes"
     "net/http"
     "regexp"
     "strings"
+
     "github.com/go-martini/martini"
+    "github.com/jacob-meacham/quotee/models"
+    "github.com/jacob-meacham/quotee/routes"
 )
 
 // The one and only martini instance.
@@ -20,6 +22,16 @@ func init() {
     m.Use(MapEncoder)
     // Setup routes
     r := martini.NewRouter()
+
+    var sourceMap = map[string]models.QuoteSource{
+        "file": &models.FileQuoteSource{},
+        "theysaidso": &models.TheySaidSoQuoteSource{},
+        "quotedb": &models.QuoteDBSource{},
+    }
+    routes.SetQuoteSources(&sourceMap)
+
+    r.Get("/quote", routes.GetQuote)
+    r.Get("/quote/:source", routes.GetQuote)
     
     // Add the router action
     m.Action(r.Handle)
