@@ -1,9 +1,7 @@
 package routes
 
 import (
-    //"fmt"
     "net/http"
-    //"strconv"
     "math/rand"
 
     "github.com/go-martini/martini"
