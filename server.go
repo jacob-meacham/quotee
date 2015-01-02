@@ -1,14 +1,11 @@
 package main
 
 import (
-    "github.com/jacob-meacham/quotee/models"
     "github.com/jacob-meacham/quotee/routes"
-    //"log"
     "net/http"
     "regexp"
     "strings"
     "github.com/go-martini/martini"
-    "github.com/coopernurse/gorp"
 )
 
 // The one and only martini instance.
@@ -24,8 +21,6 @@ func init() {
     // Setup routes
     r := martini.NewRouter()
     
-    // Inject database
-    m.MapTo(models.Dbm, (*gorp.SqlExecutor)(nil))
     // Add the router action
     m.Action(r.Handle)
 }
