@@ -31,7 +31,7 @@ func GetQuote(r *http.Request, enc Encoder, parms martini.Params) (int, string) 
 
     quote, err := quoteSource.GetQuote()
     if err != nil {
-        return http.StatusOK, "err"
+        panic(err)
     }
-    return http.StatusOK, quote.Body
+    return http.StatusOK, Must(enc.Encode(quote))
 }

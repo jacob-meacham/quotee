@@ -25,8 +25,12 @@ func init() {
     // Setup routes
     r := martini.NewRouter()
 
+    fileQuoteSource, err := models.CreateFileQuoteSource("data/quotes.csv")
+    if err != nil {
+        panic(err)
+    }
     sourceMap := map[string]models.QuoteSource{
-        "file": models.FileQuoteSource{},
+        "file": fileQuoteSource,
         "theysaidso": models.TheySaidSoQuoteSource{},
         "quotedb": models.QuoteDBSource{},
     }
