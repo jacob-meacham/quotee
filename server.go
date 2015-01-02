@@ -4,6 +4,8 @@ import (
     "net/http"
     "regexp"
     "strings"
+    "time"
+    "math/rand"
 
     "github.com/go-martini/martini"
     "github.com/jacob-meacham/quotee/models"
@@ -23,12 +25,12 @@ func init() {
     // Setup routes
     r := martini.NewRouter()
 
-    sources := []models.QuoteSourceEntry{
-        {"file", models.FileQuoteSource{}},
-        {"theysaidso", models.TheySaidSoQuoteSource{}},
-        {"quotedb", models.QuoteDBSource{}},
+    sourceMap := map[string]models.QuoteSource{
+        "file": models.FileQuoteSource{},
+        "theysaidso": models.TheySaidSoQuoteSource{},
+        "quotedb": models.QuoteDBSource{},
     }
-    routes.SetQuoteSources(sources)
+    routes.SetQuoteSources(sourceMap)
 
     r.Get("/quote", routes.GetQuote)
     r.Get("/quote/:source", routes.GetQuote)
@@ -73,5 +75,6 @@ func MapEncoder(c martini.Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+    rand.Seed(time.Now().UTC().UnixNano())
     m.Run()
 }
