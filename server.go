@@ -6,6 +6,7 @@ import (
     "strings"
     "time"
     "math/rand"
+    "log"
 
     "github.com/go-martini/martini"
     "github.com/jacob-meacham/quotee/models"
@@ -25,22 +26,36 @@ func init() {
     // Setup routes
     r := martini.NewRouter()
 
-    fileQuoteSource, err := models.CreateFileQuoteSource("data/quotes.csv")
-    if err != nil {
-        panic(err)
-    }
-    sourceMap := map[string]models.QuoteSource{
-        "file": fileQuoteSource,
-        "theysaidso": models.TheySaidSoQuoteSource{},
-        "quotedb": models.QuoteDBSource{},
-    }
+    sourceMap := getQuoteSources()
+    logSources(sourceMap)
     routes.SetQuoteSources(sourceMap)
 
     r.Get("/quote", routes.GetQuote)
     r.Get("/quote/:source", routes.GetQuote)
+    r.Get("/quote/theysaidso/static", routes.GetTest)
     
     // Add the router action
     m.Action(r.Handle)
+}
+
+func getQuoteSources() map[string]models.QuoteSource {
+    fileQuoteSource, err := models.CreateFileQuoteSource("data/quotes.csv")
+    if err != nil {
+        panic(err)
+    }
+
+    return map[string]models.QuoteSource{
+        "file": fileQuoteSource,
+        "theysaidso": models.TheySaidSoQuoteSource{Url: "http://localhost:3000/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}},
+        "quotedb": models.QuoteDBSource{},
+    }
+}
+
+func logSources(sources map[string]models.QuoteSource) {
+    log.Print("Registered Sources:")
+    for name, v := range sources {
+        log.Printf("/quote/%s: %s", name, v)
+    }
 }
 
 // The regex to check for the requested format (allows an optional trailing

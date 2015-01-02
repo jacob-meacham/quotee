@@ -1,14 +1,16 @@
 package models
 
 import (
+    "fmt"
     "encoding/csv"
     "os"
     "math/rand"
     "errors"
-    "log"
     "net/http"
     "strings"
     "io/ioutil"
+
+    "gopkg.in/jmcvetta/napping.v1"
 )
 
 type Quote struct {
@@ -25,12 +27,26 @@ type QuoteDBSource struct {
     Categories []string
 }
 
+func (source QuoteDBSource) String() string {
+    return fmt.Sprintf("QuoteDBSource - Quotes from http://www.quotedb.com/quote/quote.php?action=random_quote, using %s categories.", source.Categories)
+}
+
 type TheySaidSoQuoteSource struct {
+    Url string
     Categories []string
 }
 
+func (source TheySaidSoQuoteSource) String() string {
+    return fmt.Sprintf("TheySaidSoQuoteSource - Quotes from %s, using %s categories.", source.Url, source.Categories)
+}
+
 type FileQuoteSource struct {
+    filename string
     quotes []Quote
+}
+
+func (source FileQuoteSource) String() string {
+    return fmt.Sprintf("FileQuoteSource - %d quotes loaded from %s", len(source.quotes), source.filename)
 }
 
 func CreateFileQuoteSource(filename string) (source FileQuoteSource, err error) {
@@ -46,10 +62,10 @@ func CreateFileQuoteSource(filename string) (source FileQuoteSource, err error) 
         return
     }
 
+    source.filename = filename
     for _, record := range records {
         source.quotes = append(source.quotes, Quote{record[0],record[1]})
     }
-    log.Printf("Source from %s contains %d quotes", filename, len(source.quotes))
 
     return
 }
@@ -82,8 +98,34 @@ func (source QuoteDBSource) GetQuote() (Quote, error) {
     return Quote{quoteBody, quoteAuthor}, nil
 }
 
+type TheySaidSoQuote struct {
+    Contents struct {
+        Quote string `json:"quote"`
+        Author string `json:"author"`
+        Length string `json:"length"`
+        Tags []string `json:"tags"`
+        Category string `json:"category"`
+    } `json:"contents"`
+}
+
+func (q TheySaidSoQuote) String() string {
+    return fmt.Sprintf("%s - %s (%d)", q.Contents.Quote, q.Contents.Author, q.Contents.Length)
+}
+
 func (source TheySaidSoQuoteSource) GetQuote() (Quote, error) {
-    return Quote{"TheySaidSoQuoteSource", "bar"}, nil
+    params := napping.Params {
+    "category": source.Categories[rand.Intn(len(source.Categories))],
+    }
+    result := TheySaidSoQuote{}
+    resp, err := napping.Get(source.Url, &params, &result, nil)
+    if err != nil {
+        return Quote{}, err
+    }
+    if resp.Status() != 200 {
+        return Quote{}, errors.New("Received failed response from theysaidso") 
+    }
+
+    return Quote{result.Contents.Quote, result.Contents.Author}, nil
 }
 
 func (source FileQuoteSource) GetQuote() (Quote, error) {
