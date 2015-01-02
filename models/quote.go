@@ -9,11 +9,6 @@ type QuoteSource interface {
     GetQuote() (Quote, error)
 }
 
-type QuoteSourceEntry struct {
-    Name string
-    Source QuoteSource
-}
-
 // Quotes from 
 type QuoteDBSource struct {
     Categories []string
