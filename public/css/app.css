@@ -22,3 +22,8 @@ body {
     opacity: 0.7;
     float: right;
 }
+
+.inverse {
+    background-color: #111111;
+    color: #ffffff;
+}
