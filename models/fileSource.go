@@ -10,11 +10,11 @@ import (
 
 type FileQuoteSource struct {
     filename string
-    quotes []Quote
+    Quotes []Quote
 }
 
 func (source FileQuoteSource) String() string {
-    return fmt.Sprintf("FileQuoteSource - %d quotes loaded from %s", len(source.quotes), source.filename)
+    return fmt.Sprintf("FileQuoteSource - %d quotes loaded from %s", len(source.Quotes), source.filename)
 }
 
 func CreateFileQuoteSource(filename string) (source FileQuoteSource, err error) {
@@ -32,16 +32,16 @@ func CreateFileQuoteSource(filename string) (source FileQuoteSource, err error) 
 
     source.filename = filename
     for _, record := range records {
-        source.quotes = append(source.quotes, Quote{record[0],record[1]})
+        source.Quotes = append(source.Quotes, Quote{record[0],record[1]})
     }
 
     return
 }
 
 func (source FileQuoteSource) GetQuote() (Quote, error) {
-    if len(source.quotes) == 0 {
+    if len(source.Quotes) == 0 {
         return Quote{}, errors.New("No quotes in this source")
     }
 
-    return source.quotes[rand.Intn(len(source.quotes))], nil
+    return source.Quotes[rand.Intn(len(source.Quotes))], nil
 }
