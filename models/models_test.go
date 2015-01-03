@@ -15,17 +15,16 @@ var _ = Describe("Models", func() {
 
             Expect(source.Categories).To(Equal(categories))
         })
-        /*
+        
         Context("When the URL is well-formed", func() {
             It("returns a quote", func() {
-                source := TheySaidSoQuoteSource{Url: "http://api.theysaidso.com/qod.json", Categories: []string{"funny", "life", "inspire", "love"}}
+                source := TheySaidSoQuoteSource{Url: "http://localhost:3000/api/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}}
                 quote, err := source.GetQuote()
                 Expect(err).ToNot(HaveOccurred())
                 Expect(quote.Body).ToNot(BeNil())
                 Expect(quote.Author).ToNot(BeNil())
             })
         })
-        */
 
         Context("When the URL is not correct", func() {
             It("returns an error", func() {
