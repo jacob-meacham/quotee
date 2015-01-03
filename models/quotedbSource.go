@@ -9,15 +9,16 @@ import (
 
 // Quotes from 
 type QuoteDBSource struct {
+    Url string
     Categories []string
 }
 
 func (source QuoteDBSource) String() string {
-    return fmt.Sprintf("QuoteDBSource - Quotes from http://www.quotedb.com/quote/quote.php?action=random_quote, using %s categories.", source.Categories)
+    return fmt.Sprintf("QuoteDBSource - Quotes from %s, using %s categories.", source.Url, source.Categories)
 }
 
 func (source QuoteDBSource) GetQuote() (Quote, error) {
-    resp, err := http.Get("http://www.quotedb.com/quote/quote.php?action=random_quote")
+    resp, err := http.Get(source.Url)
     if err != nil {
         return Quote{}, err
     }

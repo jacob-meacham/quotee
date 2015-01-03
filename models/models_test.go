@@ -19,6 +19,7 @@ var _ = Describe("Models", func() {
         Context("When the URL is well-formed", func() {
             It("returns a quote", func() {
                 source := TheySaidSoQuoteSource{Url: "http://localhost:3000/api/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}}
+                Expect(source.String()).To(Equal("TheySaidSoQuoteSource - Quotes from http://localhost:3000/api/quote/theysaidso/static, using [funny life inspire love] categories."))
                 quote, err := source.GetQuote()
                 Expect(err).ToNot(HaveOccurred())
                 Expect(quote.Body).ToNot(BeNil())
@@ -38,11 +39,20 @@ var _ = Describe("Models", func() {
     Describe("QuoteDB", func() {
         Context("When the URL is well-formed", func() {
             It("returns a quote", func() {
-                source := QuoteDBSource{Categories: []string{"funny", "life", "inspire", "love"}}
+                source := QuoteDBSource{Url: "http://www.quotedb.com/quote/quote.php?action=random_quote", Categories: []string{"funny", "life", "inspire", "love"}}
+                Expect(source.String()).To(Equal("QuoteDBSource - Quotes from http://www.quotedb.com/quote/quote.php?action=random_quote, using [funny life inspire love] categories."))
                 quote, err := source.GetQuote()
                 Expect(err).ToNot(HaveOccurred())
                 Expect(quote.Body).ToNot(BeNil())
                 Expect(quote.Author).ToNot(BeNil())
+            })
+        })
+
+        Context("When the URL is not correct", func() {
+            It("returns an error", func() {
+                source := QuoteDBSource{Url: "http://------.com/notreal", Categories: []string{"funny", "life", "inspire", "love"}}
+                _, err := source.GetQuote()
+                Expect(err).To(HaveOccurred())
             })
         })
     })
@@ -54,6 +64,7 @@ var _ = Describe("Models", func() {
                 Expect(err).ToNot(HaveOccurred())
                 Expect(len(source.Quotes)).To(Equal(2))
                 Expect(source.Quotes[1].Body).To(Equal("Im a second test"))
+                Expect(source.String()).To(Equal("FileQuoteSource - 2 quotes loaded from ./test/good_multi.csv"))
             })
 
             It("returns a quote from the list", func() {
