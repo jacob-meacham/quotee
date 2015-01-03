@@ -5,7 +5,15 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+    "io"
+    "net/http"
+    "net/http/httptest"
 )
+
+func ServerMock(w http.ResponseWriter, req *http.Request) {
+    io.WriteString(w, `{"success":{"total":1},"contents":{"id":"UA6fPz652xt_AJzwP1ULiweF","quote":"Behind every successful man is a woman, behind her is his wife.","author":"Groucho Marx","length":"150","tags":["funny","humor","women"],"category":"funny"}}`)
+}
 
 var _ = Describe("Models", func() {
     Describe("TheySaidSoSource", func() {
@@ -18,12 +26,15 @@ var _ = Describe("Models", func() {
         
         Context("When the URL is well-formed", func() {
             It("returns a quote", func() {
-                source := TheySaidSoQuoteSource{Url: "http://localhost:3000/api/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}}
-                Expect(source.String()).To(Equal("TheySaidSoQuoteSource - Quotes from http://localhost:3000/api/quote/theysaidso/static, using [funny life inspire love] categories."))
+                testServer := httptest.NewServer(http.HandlerFunc(ServerMock))
+                defer testServer.Close()
+
+                source := TheySaidSoQuoteSource{Url: testServer.URL + "/api/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}}
+                Expect(source.String()).To(Equal("TheySaidSoQuoteSource - Quotes from " + testServer.URL + "/api/quote/theysaidso/static, using [funny life inspire love] categories."))
                 quote, err := source.GetQuote()
                 Expect(err).ToNot(HaveOccurred())
-                Expect(quote.Body).ToNot(BeNil())
-                Expect(quote.Author).ToNot(BeNil())
+                Expect(quote.Body).To(Equal("Behind every successful man is a woman, behind her is his wife."))
+                Expect(quote.Author).To(Equal("Groucho Marx"))
             })
         })
 
