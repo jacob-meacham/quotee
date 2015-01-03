@@ -2,21 +2,29 @@ package main_test
 
 import (
 	. "github.com/jacob-meacham/quotee"
+    . "github.com/jacob-meacham/quotee/models"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
     
     "github.com/go-martini/martini"
     "encoding/json"
+    "encoding/xml"
     "net/http"
     "net/http/httptest"
-    //"log"
 )
 
 func mapFromJSON(data []byte) map[string]interface{} {
     var result interface{}
     json.Unmarshal(data, &result)
     return result.(map[string]interface{})
+}
+
+func quoteFromXML(data []byte) Quote {
+    var result Quote
+    err := xml.Unmarshal(data, &result)
+    Expect(err).ToNot(HaveOccurred())
+    return result
 }
 
 var _ = Describe("Server", func() {
@@ -46,13 +54,23 @@ var _ = Describe("Server", func() {
                 Expect(quoteJson["body"]).ToNot(BeNil())
                 Expect(quoteJson["author"]).ToNot(BeNil())
             })
+        })
 
+        Context("When asked for a particular content type", func() {
             It("returns a json quote", func() {
                 request, _ = http.NewRequest("GET", "/api/quote.json", nil)
                 server.ServeHTTP(recorder, request)
                 quoteJson := mapFromJSON(recorder.Body.Bytes())
                 Expect(quoteJson["body"]).ToNot(BeNil())
                 Expect(quoteJson["author"]).ToNot(BeNil())
+            })
+
+            It("returns an xml quote", func() {
+                request, _ = http.NewRequest("GET", "/api/quote.xml", nil)
+                server.ServeHTTP(recorder, request)
+                quote := quoteFromXML(recorder.Body.Bytes())
+                Expect(quote.Body).ToNot(BeNil())
+                Expect(quote.Author).ToNot(BeNil())
             })
         })
     })
