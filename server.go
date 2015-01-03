@@ -13,11 +13,9 @@ import (
     "github.com/jacob-meacham/quotee/routes"
 )
 
-// The one and only martini instance.
-var m *martini.Martini
-
-func init() {
-    m = martini.New()
+func NewServer() *martini.Martini {
+    m := martini.New()
+    
     // Setup middleware
     m.Use(martini.Recovery())
     m.Use(martini.Logger())
@@ -36,6 +34,7 @@ func init() {
     
     // Add the router action
     m.Action(r.Handle)
+    return m
 }
 
 func getQuoteSources() map[string]models.QuoteSource {
@@ -96,5 +95,6 @@ func MapEncoder(c martini.Context, w http.ResponseWriter, r *http.Request) {
 
 func main() {
     rand.Seed(time.Now().UTC().UnixNano())
-    m.Run()
+    server := NewServer()
+    server.Run()
 }
