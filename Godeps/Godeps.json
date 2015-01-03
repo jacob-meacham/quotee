@@ -11,6 +11,26 @@
 			"ImportPath": "github.com/go-martini/martini",
 			"Comment": "v1.0-85-gbbd489b",
 			"Rev": "bbd489b35fd7eac9aaf442e5671ab21cdd972926"
+		},
+		{
+			"ImportPath": "github.com/onsi/ginkgo",
+			"Comment": "v1.1.0-32-g291f28e",
+			"Rev": "291f28e66dd277f35d3635990a7448759645c7e7"
+		},
+		{
+			"ImportPath": "github.com/onsi/gomega",
+			"Comment": "v1.0-28-g8adf9e1",
+			"Rev": "8adf9e1730c55cdc590de7d49766cb2acc88d8f2"
+		},
+		{
+			"ImportPath": "github.com/sclevine/agouti/core",
+			"Comment": "v1-latest-8-g350f0c7",
+			"Rev": "350f0c720cae0e833e80e894110d6f05e33e211f"
+		},
+		{
+			"ImportPath": "gopkg.in/jmcvetta/napping.v1",
+			"Comment": "v1",
+			"Rev": "2d97c78f6d03e78ba167e2a252e578014c7769f9"
 		}
 	]
 }
