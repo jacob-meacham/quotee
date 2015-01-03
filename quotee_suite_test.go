@@ -3,7 +3,7 @@ package main_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	//. "github.com/sclevine/agouti/core"
+	. "github.com/sclevine/agouti/core"
 
 	"testing"
 )
@@ -13,19 +13,21 @@ func TestQuotee(t *testing.T) {
 	RunSpecs(t, "Quotee Suite")
 }
 
-//var agoutiDriver WebDriver
+var agoutiDriver WebDriver
 
 var _ = BeforeSuite(func() {
-	//var err error
+	var err error
 
-	//agoutiDriver, err = PhantomJS()
+	agoutiDriver, err = PhantomJS()
 	// agoutiDriver, err = Selenium()
 	// agoutiDriver, err = Chrome()
 
-	//Expect(err).NotTo(HaveOccurred())
+	Expect(err).NotTo(HaveOccurred())
+
+	// TODO
 	//Expect(agoutiDriver.Start()).To(Succeed())
 })
 
 var _ = AfterSuite(func() {
-	//agoutiDriver.Stop()
+	agoutiDriver.Stop()
 })
