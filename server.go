@@ -45,8 +45,7 @@ func getQuoteSources() map[string]models.QuoteSource {
 
     return map[string]models.QuoteSource{
         "file": fileQuoteSource,
-        //"theysaidso": models.TheySaidSoQuoteSource{Url: "http://api.theysaidso.com/qod.json", Categories: []string{"funny", "life", "inspire", "love"}},
-        "theysaidso": models.TheySaidSoQuoteSource{Url: "http://localhost:3000/api/quote/theysaidso/static", Categories: []string{"funny", "life", "inspire", "love"}},
+        "theysaidso": models.TheySaidSoQuoteSource{Url: "http://api.theysaidso.com/qod.json", Categories: []string{"funny", "life", "inspire", "love"}},
         "quotedb": models.QuoteDBSource{Url: "http://www.quotedb.com/quote/quote.php?action=random_quote"},
     }
 }
