@@ -15,7 +15,7 @@ angular.module('quotee')
 
       if (autoplay) {
         intervalPromise = $interval(function() {
-          showQuote(true); }, 5 * 1000, 1);
+          showQuote(true); }, 5 * 60 * 1000, 1);
       }
     };
 
