@@ -25,6 +25,9 @@ func CreateFileQuoteSource(filename string) (source FileQuoteSource, err error) 
     defer f.Close()
 
     reader := csv.NewReader(f)
+    reader.Comma = '|'
+    reader.TrimLeadingSpace = true
+    reader.FieldsPerRecord = 2
     records, err := reader.ReadAll()
     if (err != nil) {
         return
