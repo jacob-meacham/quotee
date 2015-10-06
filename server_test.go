@@ -1,13 +1,11 @@
 package main_test
 
 import (
-	. "github.com/jacob-meacham/quotee"
     . "github.com/jacob-meacham/quotee/models"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
     
-    "github.com/go-martini/martini"
     "encoding/json"
     "encoding/xml"
     "net/http"
@@ -28,12 +26,11 @@ func quoteFromXML(data []byte) Quote {
 }
 
 var _ = Describe("Server", func() {
-    var server *martini.Martini
+    
     var request *http.Request
     var recorder *httptest.ResponseRecorder
 
     BeforeEach(func() {
-        server = NewServer()
         recorder = httptest.NewRecorder()
     })
 

@@ -1,34 +1,28 @@
 package main_test
 
 import (
-	. "github.com/jacob-meacham/quotee"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/sclevine/agouti/core"
-
-	"github.com/go-martini/martini"
+	"github.com/sclevine/agouti"
 )
 
 var _ = Describe("Home", func() {
-	var page Page
-	var server *martini.Martini
+	var page *agouti.Page
 
 	BeforeEach(func() {
-		server = NewServer()
-		//var err error
-		page, _ = agoutiDriver.Page()
-		//Expect(err).NotTo(HaveOccurred())
+		var err error
+		page, err = agoutiDriver.NewPage()
+		Expect(err).NotTo(HaveOccurred())
 	})
 
 	AfterEach(func() {
-		//page.Destroy()
+		Expect(page.Destroy()).To(Succeed())
 	})
 
 	It("should show a quote on the page", func() {
 		By("appearing", func() {
-			Expect(true).To(BeTrue())
-			//Expect(page.Navigate("http://localhost:3000")).To(Succeed())
+			//Expect(true).To(BeTrue())
+			Expect(page.Navigate("http://localhost:3000")).To(Succeed())
 			//Eventually(page.Find(".quote")).ShouldNot(BeNil())
 			//Expect(page.Find(".author")).ToNot(BeNil())
 		})

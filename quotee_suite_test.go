@@ -1,33 +1,31 @@
 package main_test
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	. "github.com/sclevine/agouti/core"
+  . "github.com/jacob-meacham/quotee"
+  . "github.com/onsi/ginkgo"
+  . "github.com/onsi/gomega"
 
-	"testing"
+  "github.com/sclevine/agouti"
+  "github.com/go-martini/martini"
+  
+  "testing"
 )
 
 func TestQuotee(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Quotee Suite")
+  RegisterFailHandler(Fail)
+  RunSpecs(t, "Quotee Suite")
 }
 
-var agoutiDriver WebDriver
+var agoutiDriver *agouti.WebDriver
+var server *martini.Martini
 
 var _ = BeforeSuite(func() {
-	var err error
+  agoutiDriver = agouti.PhantomJS()
+  server = NewServer()
 
-	agoutiDriver, err = PhantomJS()
-	// agoutiDriver, err = Selenium()
-	// agoutiDriver, err = Chrome()
-
-	Expect(err).NotTo(HaveOccurred())
-
-	// TODO
-	//Expect(agoutiDriver.Start()).To(Succeed())
+  Expect(agoutiDriver.Start()).To(Succeed())
 })
 
 var _ = AfterSuite(func() {
-	agoutiDriver.Stop()
+  agoutiDriver.Stop()
 })

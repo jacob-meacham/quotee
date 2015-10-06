@@ -14,6 +14,13 @@ The front-end also takes a few parameters:
 * style: If set to inverse, forces the inverse theme. *[https://quotee.herokuapp.com/?style=inverse](https://quotee.herokuapp.com/?style=inverse)*
 * autoplay: If set to true, auto-refreshes the quote every 5 minutes. *[https://quotee.herokuapp.com/?autoplay=true](https://quotee.herokuapp.com/?autoplay=true)*
 
+Installation
+============
+* Run npm install
+* Run go serve
+
+To run tests, use `ginkgo`
+
 Sources
 =======
 Quotee exposes an extremely simple REST API and can pull quotes from a variety of sources. To get a quote from a random source, you can use:
